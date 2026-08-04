@@ -13,6 +13,7 @@
       font-size: 100px;
       margin-top: 50px;
     }
+    
     #startBtn {
       right: auto;
       left: 10px;
@@ -23,7 +24,8 @@
 <body id="bodyEl">
   <h1 id="title"></h1>
   <button id="startBtn">START</button>
-  
+  <button id="stopBtn">STOP</button>
+
   <script>
     const title = document.getElementById('title');
     const body = document.getElementById('bodyEl');
@@ -32,7 +34,7 @@
     const music = new Audio('music.mp3');
     music.loop = true;
 
-    const wordlist = ['you', 'got', 'a', 'virus :D'];
+    const wordlist = ['your', 'are', 'best', 'here :D'];
     let index = 0;
     let nextAn = 1;
     let popups = [];
@@ -59,7 +61,7 @@
 
     function startMadness() {
       startBtn.style.display = 'none';
-    
+      stopBtn.style.display = 'block';
 
       const testPop = window.open('', '', 'width=200,height=100');
       if (!testPop) {
@@ -100,15 +102,8 @@
     }
 
     startBtn.addEventListener('click', startMadness);
-
     
-      popups.forEach(p => {
-        try { p.close(); } catch (e) {}
-      });
-      music.pause();
-      music.currentTime = 0;
-      popups = [];
-    });
+    
 
     window.addEventListener('load', () => {
       title.style.marginTop = (window.innerHeight / 2 - 120).toString() + "px";
