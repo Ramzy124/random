@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Browser Tab Simulator</title>
+<style>
+  body {
+    margin: 0;
+    background: #111;
+    color: white;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+  }
+
+  #browser {
+    background: #222;
+    height: 100vh;
+  }
+
+  #tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 10px;
+    background: #333;
+    height: 120px;
+    overflow: hidden;
+  }
+
+  .tab {
+    background: #555;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+  }
+
+  #main {
+    text-align: center;
+    margin-top: 80px;
+  }
+
+  #message {
+    font-size: 50px;
+    color: lime;
+    font-weight: bold;
+  }
+
+  #count {
+    font-size: 30px;
+    color: yellow;
+  }
+
+  button {
+    padding: 12px 25px;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 8px;
+    border: none;
+  }
+</style>
+</head>
+
+<body>
+
+<div id="browser">
+  <div id="tabs"></div>
+
+  <div id="main">
+    <div id="count">Tabs: 0</div>
+    <div id="message">You're an idiot!</div>
+    <br>
+    <button onclick="stopPrank()">STOP PRANK</button>
+  </div>
+</div>
+
+<script>
+let count = 0;
+let running = true;
+
+function addFakeTab() {
+  if (!running) return;
+
+  if (count < 1000) {
+    count++;
+
+    let tab = document.createElement("div");
+    tab.className = "tab";
+    tab.textContent = "Tab " + count;
+
+    document.getElementById("tabs").appendChild(tab);
+    document.getElementById("count").textContent =
+      "Tabs: " + count + " / 1000";
+
+    setTimeout(addFakeTab, 5);
+  } else {
+    document.getElementById("count").textContent =
+      "Tabs: 1000 😂";
+  }
+}
+
+function stopPrank() {
+  running = false;
+  document.body.innerHTML =
+    "<h1 style='text-align:center;margin-top:40vh;font-family:Arial'>😂 Gotcha! No tabs were harmed.</h1>";
+}
+
+addFakeTab();
+</script>
+
+</body>
+</html>
