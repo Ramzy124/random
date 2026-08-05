@@ -26,157 +26,127 @@
   <h1 id="title"></h1>
   <button id="startBtn">START</button>
 
-<script>
-const title = document.getElementById('title');
-const body = document.getElementById('bodyEl');
-const startBtn = document.getElementById('startBtn');
+  <script>
+    const title = document.getElementById('title');
+    const body = document.getElementById('bodyEl');
+    const startBtn = document.getElementById('startBtn');
 
-const music = new Audio('music.mp3');
-music.loop = true;
+    const music = new Audio('music.mp3');
+    music.loop = true;
 
-const wordlist = ['I', 'HAVE', 'YOUR', 'INFO :D'];
-let index = 0;
-let nextAn = 1;
-let popups = [];
+    const wordlist = ['I', 'HAVE', 'YOUR', 'INFO :D'];
+    let index = 0;
+    let nextAn = 1;
+    let popups = [];
 
-function getRandomCoordinates() {
-  return [
-    Math.floor(Math.random() * (screen.width - 100)),
-    Math.floor(Math.random() * (screen.height - 100))
-  ];
-}
-
-function openNewWindow() {
-  const newWin = window.open(
-    location.href + '#popup',
-    '',
-    'width=350,height=200'
-  );
-
-  if (newWin) {
-    popups.push(newWin);
-
-    const checkClose = setInterval(() => {
-      if (newWin.closed) {
-        clearInterval(checkClose);
-
-        // Faster replacement spawning
-        for (let i = 0; i < 5; i++) {
-          openNewWindow();
-        }
-      }
-    }, 50);
-  }
-}
-
-function startMadness() {
-  startBtn.style.display = 'none';
-
-  const testPop = window.open('', '', 'width=200,height=100');
-
-  if (!testPop) {
-    alert("Please enable pop-ups in your browser to continue.");
-    return;
-  }
-
-  testPop.close();
-
-  music.play();
-
-  popups.push(window);
-
-  // Faster movement
-  setInterval(() => {
-    popups.forEach(p => {
-      try {
-        const [x, y] = getRandomCoordinates();
-        p.moveTo(x, y);
-        p.focus();
-      } catch (e) {}
-    });
-  }, 5);
-
-
-  // Faster title flashing
-  setInterval(() => {
-    title.textContent = wordlist[index];
-
-    if (nextAn === 1) {
-      title.style.color = 'black';
-      body.style.backgroundColor = 'white';
-      nextAn = 2;
-    } else {
-      title.style.color = 'white';
-      body.style.backgroundColor = 'black';
-      nextAn = 1;
+    function getRandomCoordinates() {
+      return [
+        Math.floor(Math.random() * (screen.width - 100)),
+        Math.floor(Math.random() * (screen.height - 100))
+      ];
     }
 
-    index = (index + 1) % wordlist.length;
-  }, 150);
+    function openNewWindow() {
+      const newWin = window.open(location.href + '#popup', '', 'width=350,height=200');
 
+      if (newWin) {
+        popups.push(newWin);
 
-  // Bigger initial popup burst
-  for (let i = 0; i < 50; i++) {
-    openNewWindow();
-  }
-}
+        const checkClose = setInterval(() => {
+          if (newWin.closed) {
+            clearInterval(checkClose);
+            for (let i = 0; i < 2; i++) openNewWindow();
+          }
+        }, 500);
+      }
+    }
 
-startBtn.addEventListener('click', startMadness);
+    function startMadness() {
+      startBtn.style.display = 'none';
 
+      const testPop = window.open('', '', 'width=200,height=100');
 
-window.addEventListener('load', () => {
-  title.style.marginTop = (window.innerHeight / 2 - 120) + "px";
+      if (!testPop) {
+        alert("Please enable pop-ups in your browser to continue.");
+        return;
+      } else {
+        testPop.close();
+      }
 
-  if (location.href.includes('#popup')) {
+      music.play();
+      popups.push(window);
 
-    document.body.innerHTML = '<h1 id="title">you</h1>';
+      setInterval(() => {
+        popups.forEach(p => {
+          try {
+            const [x, y] = getRandomCoordinates();
+            p.moveTo(x, y);
+            p.focus();
+          } catch (e) {}
+        });
+      }, 30);
 
-    const title = document.getElementById('title');
+      setInterval(() => {
+        title.textContent = wordlist[index];
 
-    music.play();
+        if (nextAn === 1) {
+          title.style.color = 'black';
+          body.style.backgroundColor = 'white';
+          nextAn = 2;
+        } else {
+          title.style.color = 'white';
+          body.style.backgroundColor = 'black';
+          nextAn = 1;
+        }
 
-    setInterval(() => {
-      title.textContent = wordlist[index];
+        index = (index + 1) % wordlist.length;
+      }, 300);
 
-      document.body.style.backgroundColor =
-        nextAn === 1 ? 'white' : 'black';
+      for (let i = 0; i < 10; i++) openNewWindow();
+    }
 
-      title.style.color =
-        nextAn === 1 ? 'black' : 'white';
+    startBtn.addEventListener('click', startMadness);
 
-      nextAn = nextAn === 1 ? 2 : 1;
-      index = (index + 1) % wordlist.length;
+    window.addEventListener('load', () => {
+      title.style.marginTop = (window.innerHeight / 2 - 120) + "px";
 
-    }, 150);
+      if (location.href.includes('#popup')) {
+        document.body.innerHTML = '<h1 id="title">you</h1>';
 
-  } else {
-    startBtn.style.display = 'block';
-  }
-});
+        const title = document.getElementById('title');
 
+        music.play();
 
-window.addEventListener('resize', () => {
-  title.style.marginTop =
-    (window.innerHeight / 2 - 120) + "px";
-});
+        setInterval(() => {
+          title.textContent = wordlist[index];
+          document.body.style.backgroundColor = nextAn === 1 ? 'white' : 'black';
+          title.style.color = nextAn === 1 ? 'black' : 'white';
 
+          nextAn = nextAn === 1 ? 2 : 1;
+          index = (index + 1) % wordlist.length;
+        }, 300);
 
-// Close everything command
-window.closeAll = () => {
-  popups.forEach(p => {
-    try {
-      p.close();
-    } catch (e) {}
-  });
+      } else {
+        startBtn.style.display = 'block';
+      }
+    });
 
-  music.pause();
-  music.currentTime = 0;
-  popups = [];
+    window.addEventListener('resize', () => {
+      title.style.marginTop = (window.innerHeight / 2 - 120) + "px";
+    });
 
-  console.log("Closed all popups and stopped music.");
-};
+    // Hidden console command to close everything
+    window.closeAll = () => {
+      popups.forEach(p => {
+        try { p.close(); } catch (e) {}
+      });
 
-</script>
+      music.pause();
+      music.currentTime = 0;
+      popups = [];
 
+      console.log("Closed all popups and stopped music.");
+    };
+  </script>
 </body>
 </html>
